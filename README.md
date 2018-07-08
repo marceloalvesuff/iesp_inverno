@@ -1,5 +1,5 @@
-# Escola de Inverno do IESP
-Scripts, dados e informações sobre o curso Coleta e Sistematização de Dados na Web
+# Escola de Inverno do IESP | Coleta e Sistematização de Dados na Web
+Scripts, dados e informações sobre o curso 
 
 
 Este curso tem o objetivo de capacitar os alunos a desenvolverem na prática o processo analítico da web de dados pela linguagem R. Introdução a métodos de coleta de dados via API das plataformas de mídias sociais. Conjuntura dos dados digitais face à crise de
