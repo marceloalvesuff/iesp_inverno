@@ -1,4 +1,4 @@
-# iesp_inverno
+# Escola de Inverno do IESP
 Scripts, dados e informações sobre o curso Coleta e Sistematização de Dados na Web
 
 
