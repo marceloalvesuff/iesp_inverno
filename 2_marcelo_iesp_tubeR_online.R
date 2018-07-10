@@ -46,8 +46,8 @@ rm(list = ls())
 # Em Credentials, crie o Oauth Client IC
 
 # Gere a autentificação
-client_id <- "XXXXXXXXXXX"
-client_secret <- "XXXXXXXXXXX"
+client_id <- "xxxxxx"
+client_secret <- "xxxxxx"
 
 yt_oauth(client_id, client_secret)
 
@@ -176,6 +176,7 @@ tmp <- lula_final %>%
 View(tmp)
 # criar níveis para ordenar
 p_load(magrittr) # extract2
+p_load(formattable)
 
 lvls <- tmp %>% filter(variable == "dislikes_media") %>% arrange(-percentage) 
 o <- tmp %>% filter(variable == "dislikes_media") %>% arrange(percentage) %>% extract2("channelTitle")
@@ -223,10 +224,7 @@ chstat = get_channel_stats(id)
 genstat = data.frame(Channel=chstat$snippet$title, 
                      Subcriptions=chstat$statistics$subscriberCount,
                      Views = chstat$statistics$viewCount,
-                     Videos = chstat$statistics$videoCount, 
-                     Likes = sum(videostats$likeCount),
-                     Dislikes = sum(videostats$dislikeCount), 
-                     Comments = sum(videostats$commentCount))
+                     Videos = chstat$statistics$videoCount)
 
 
 ########## Estudar os videos
@@ -335,20 +333,22 @@ for (x in seq_along(ids)) {
 
 rm(tmp, videostats, chstat, genstat, videos, canais)
 
-
+#### Compare as métricas dos canais e dos vídeos
 
 ##################### Extrair comentários dos videos
 
 ### ùltimo vídeo
 anitta_comments <- get_comment_threads(filter = c(video_id = "wlS6Ix7mA0w"))
 
+list <- list()
+for (x in 1:3) {
+  list[[x]] <-  get_comment_threads(filter = c(video_id = as.character(anitta$video_id[x])))
+  
+}
 
+comentarios <- do.call(rbind, list)
 
-com <- get_comment_threads(filter = "video_id", anitta$video_id[1])
-# Iteração com apply para extrair de todo o canal
-comments = lapply(as.character(anitta$video_id), function(x){
-  get_comment_threads(c(video_id = x), max_results = 1000)
-})
+## Quais usuários possuem os comentários mais curtidos?
 
 
 ######### Quais são os vídeos recomendados?
@@ -356,6 +356,3 @@ comments = lapply(as.character(anitta$video_id), function(x){
 anitta_related <- get_related_videos(video_id = "wlS6Ix7mA0w", max_results = 50,
                    safe_search = "none")
 
-######### Inscritos no canal
-
-get_subscriptions()
