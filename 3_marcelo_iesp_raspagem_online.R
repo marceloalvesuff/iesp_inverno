@@ -96,17 +96,35 @@ tabela <-  page %>%
 
 
 ## percebam que veio uma lista
-class(tabela)
+class(tabela[[1]])
 
 
 ### Vamos extrair o df
-
+library(dplyr)
 tabela <- tabela[[1]]
+names(tabela)[6] <- "Differences_perc"
+names(tabela)[8] <- "AbsoluteDiffs_perc"
+
+tabela$Benchmark <- gsub(",", "",tabela$Benchmark)
+tabela$`Estimate(2)` <- gsub(",", "",tabela$`Estimate(2)`)
+tabela$Differences_perc <- gsub(",", "",tabela$Differences_perc)
+tabela$AbsoluteDiffs_perc <- gsub(",", "",tabela$AbsoluteDiffs_perc)
+
+tabela2 <- tabela %>%
+  transmute(Benchmark = as.numeric(Benchmark),
+         Estimate = as.numeric(`Estimate(2)`),
+         Differences = as.numeric(Differences_perc),
+         Absolute_Differences = AbsoluteDiffs_perc)
+
+tabela2 <- tabela2[-c(1,2),]
+sapply(tabela2, class) # checar classe
+
+
+# eliminar duas primeiras linhas
 
 
 
-
-
+##
 
 ######################## Tabular página ######################## 
 #
@@ -135,9 +153,9 @@ pg <- read_html(URL) # ler a página
 
 ### Nomes
 
-Nome <- pg %>% 
-  html_nodes(".jrContentTitle") %>% 
-  html_text() 
+  Nome <- pg %>% 
+    html_nodes(".jrContentTitle") %>% 
+    html_text() 
 
 # limpar
 
@@ -232,7 +250,14 @@ elenco <- url %>%
   html_text()
 elenco
 
+url %>%
+  html_nodes(".imdbRating") %>%
+  html_nodes("strong") %>%
+  html_text()
 
+url %>%
+  html_nodes("time") %>%
+  html_text()
 
 # Avaliação
 avaliacao <- url %>%
@@ -278,7 +303,7 @@ Imagem <- vector()
 
 # criar link
 base <- "http://www.brejas.com.br/cervejaria/microcervejaria?page="
-URL <- paste0(base, x)
+#URL <- paste0(base, x)
 
 
 for (x in 1:5) {
